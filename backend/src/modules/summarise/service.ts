@@ -2,33 +2,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 import { employeeUpdates } from "../../source/data";
 import { WEEKLY_PROMPT } from "./prompts";
-
-// type EmployeeUpdates = {
-//     data: {
-//         date: string;
-//         occassion: any;
-//         updates: ({
-//             employee: {
-//                 id: number;
-//                 name: string;
-//                 employeeId: string;
-//                 email: string;
-//                 joiningDate: string;
-//                 designation: string;
-//                 location: string;
-//                 timezone: string;
-//                 ... 15 more ...;
-//                 techStack: string;
-//             };
-//             ... 5 more ...;
-//             exempted: boolean;
-//         } | {
-//             ...;
-//         })[];
-//         releaseNotes: any[];
-//         meeting: any[];
-//     }[];
-// };
+import { appendData } from "../../utils";
+import { Leave } from "../../types/updateResponse";
 
 
 const genAI = new GoogleGenerativeAI(process.env.LLM_SERVICE_API_KEY || "");
@@ -49,7 +24,7 @@ export function filterTeamData() {
                     gender: update.employee.gender,
                 },
                 update: update.update?.remarks || null,
-                leaves: update.leaves?.filter((leave: any) => leave.status === "APPROVED") || [],
+                leaves: update.leaves?.filter((leave: Leave) => leave.status === "APPROVED") || [],
                 holiday: update.holiday || null,
             });
         }
@@ -57,10 +32,7 @@ export function filterTeamData() {
     return filteredData;
 }
 
-function appendData(prompt: string, data: string) {
-    return prompt + '```\n' + data + '\n```\n';
-    
-}
+
 
 export async function createPrompt() {
     

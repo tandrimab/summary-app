@@ -1,12 +1,14 @@
 import 'dotenv/config';
 
-import app from "./app";
+import logger from "./logger";
+logger.info("Winston logging initialized!");
 
-const PORT = process.env.PORT || 3001;
+import app from "./app";
 
 init();
 
 async function init() {
+    const PORT = process.env.PORT || 3001;
     try {
         app.listen(PORT, () => {
             console.log(`Summary app listening on port ${PORT}`);

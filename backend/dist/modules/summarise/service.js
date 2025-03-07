@@ -14,32 +14,7 @@ exports.createPrompt = createPrompt;
 const generative_ai_1 = require("@google/generative-ai");
 const data_1 = require("../../source/data");
 const prompts_1 = require("./prompts");
-// type EmployeeUpdates = {
-//     data: {
-//         date: string;
-//         occassion: any;
-//         updates: ({
-//             employee: {
-//                 id: number;
-//                 name: string;
-//                 employeeId: string;
-//                 email: string;
-//                 joiningDate: string;
-//                 designation: string;
-//                 location: string;
-//                 timezone: string;
-//                 ... 15 more ...;
-//                 techStack: string;
-//             };
-//             ... 5 more ...;
-//             exempted: boolean;
-//         } | {
-//             ...;
-//         })[];
-//         releaseNotes: any[];
-//         meeting: any[];
-//     }[];
-// };
+const utils_1 = require("../../utils");
 const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.LLM_SERVICE_API_KEY || "");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 function filterTeamData() {
@@ -65,13 +40,10 @@ function filterTeamData() {
     });
     return filteredData;
 }
-function appendData(prompt, data) {
-    return prompt + '```\n' + data + '\n```\n';
-}
 function createPrompt() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const prompt = appendData(prompts_1.WEEKLY_PROMPT, JSON.stringify(filterTeamData()));
+            const prompt = (0, utils_1.appendData)(prompts_1.WEEKLY_PROMPT, JSON.stringify(filterTeamData()));
             console.log("prompt: ", prompt);
             const result = yield model.generateContent(prompt);
             console.log(result.response.text());

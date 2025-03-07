@@ -13,11 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
+const logger_1 = __importDefault(require("./logger"));
+logger_1.default.info("Winston logging initialized!");
 const app_1 = __importDefault(require("./app"));
-const PORT = process.env.PORT || 3001;
 init();
 function init() {
     return __awaiter(this, void 0, void 0, function* () {
+        const PORT = process.env.PORT || 3001;
         try {
             app_1.default.listen(PORT, () => {
                 console.log(`Summary app listening on port ${PORT}`);
